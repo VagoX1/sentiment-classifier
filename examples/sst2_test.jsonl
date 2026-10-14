@@ -1,0 +1,61 @@
+{"split":"basic","category":"explicit","label":1,"expected_label":"positive","text":"A warm, funny, and thoroughly entertaining film."}
+{"split":"basic","category":"explicit","label":0,"expected_label":"negative","text":"A boring and painfully predictable movie."}
+{"split":"basic","category":"explicit","label":1,"expected_label":"positive","text":"The cast delivers excellent performances from beginning to end."}
+{"split":"basic","category":"explicit","label":0,"expected_label":"negative","text":"The weak script wastes a talented cast."}
+{"split":"basic","category":"explicit","label":1,"expected_label":"positive","text":"Beautifully filmed and deeply moving."}
+{"split":"basic","category":"explicit","label":0,"expected_label":"negative","text":"Neither exciting nor emotionally convincing."}
+{"split":"basic","category":"explicit","label":1,"expected_label":"positive","text":"A clever story with a satisfying conclusion."}
+{"split":"basic","category":"explicit","label":0,"expected_label":"negative","text":"Its endless exposition makes every scene feel longer than it is."}
+{"split":"basic","category":"explicit","label":1,"expected_label":"positive","text":"An energetic adventure that earns its biggest moments."}
+{"split":"basic","category":"explicit","label":0,"expected_label":"negative","text":"An unpleasant experience with almost nothing to recommend it."}
+{"split":"basic","category":"explicit","label":1,"expected_label":"positive","text":"The direction is confident and the dialogue consistently sharp."}
+{"split":"basic","category":"explicit","label":0,"expected_label":"negative","text":"Clumsy direction and lifeless dialogue sink the entire production."}
+{"split":"challenge","category":"negation","label":1,"expected_label":"positive","text":"It is not merely good; it is one of the year's most accomplished films."}
+{"split":"challenge","category":"negation","label":0,"expected_label":"negative","text":"The sequel is not nearly as entertaining as its predecessor."}
+{"split":"challenge","category":"negation","label":1,"expected_label":"positive","text":"There is hardly a dull moment in this brisk and inventive comedy."}
+{"split":"challenge","category":"negation","label":0,"expected_label":"negative","text":"The final act could not have been more disappointing."}
+{"split":"challenge","category":"negation","label":1,"expected_label":"positive","text":"There is no reason not to recommend this charming little film."}
+{"split":"challenge","category":"negation","label":0,"expected_label":"negative","text":"The production is not without serious and ultimately fatal flaws."}
+{"split":"challenge","category":"contrast","label":1,"expected_label":"positive","text":"The opening drags, but the film soon becomes a gripping character study."}
+{"split":"challenge","category":"contrast","label":0,"expected_label":"negative","text":"It looks gorgeous, but beneath the polished surface there is no story worth following."}
+{"split":"challenge","category":"contrast","label":1,"expected_label":"positive","text":"Despite a familiar premise, the thoughtful writing makes the journey feel fresh."}
+{"split":"challenge","category":"contrast","label":0,"expected_label":"negative","text":"Although the actors work hard, they cannot rescue the incoherent screenplay."}
+{"split":"challenge","category":"contrast","label":1,"expected_label":"positive","text":"A few jokes fall flat; even so, the comedy remains generous, lively, and delightful."}
+{"split":"challenge","category":"contrast","label":0,"expected_label":"negative","text":"The premise promises excitement, yet the execution delivers two hours of tedium."}
+{"split":"challenge","category":"contrast","label":1,"expected_label":"positive","text":"The ending is easy to predict, but getting there is such a pleasure that it hardly matters."}
+{"split":"challenge","category":"contrast","label":0,"expected_label":"negative","text":"One strong performance aside, this is a hollow and exhausting production."}
+{"split":"challenge","category":"comparison","label":0,"expected_label":"negative","text":"It is better than the director's last disaster, but that is an exceptionally low bar."}
+{"split":"challenge","category":"comparison","label":1,"expected_label":"positive","text":"It may not equal the original, yet it remains an intelligent and absorbing sequel."}
+{"split":"challenge","category":"comparison","label":0,"expected_label":"negative","text":"Less irritating than expected is the highest praise this comedy deserves."}
+{"split":"challenge","category":"comparison","label":1,"expected_label":"positive","text":"What initially seems like a minor genre exercise grows into something richer and more affecting."}
+{"split":"challenge","category":"comparison","label":0,"expected_label":"negative","text":"The trailer contains more imagination than the entire finished film."}
+{"split":"challenge","category":"comparison","label":1,"expected_label":"positive","text":"Few recent thrillers have balanced suspense and character this skillfully."}
+{"split":"challenge","category":"implicit","label":1,"expected_label":"positive","text":"When the credits appeared, I wanted to remain with these characters a little longer."}
+{"split":"challenge","category":"implicit","label":0,"expected_label":"negative","text":"I checked my watch so often that it became the most memorable part of the screening."}
+{"split":"challenge","category":"implicit","label":1,"expected_label":"positive","text":"The audience was still discussing the final scene long after leaving the theater."}
+{"split":"challenge","category":"implicit","label":0,"expected_label":"negative","text":"By the third identical chase sequence, the exit sign had become strangely inviting."}
+{"split":"challenge","category":"implicit","label":1,"expected_label":"positive","text":"The story followed me home and kept unfolding in my thoughts for days."}
+{"split":"challenge","category":"implicit","label":0,"expected_label":"negative","text":"Even the popcorn seemed more carefully constructed than the plot."}
+{"split":"challenge","category":"sarcasm","label":0,"expected_label":"negative","text":"Exactly what cinema needed: another joyless remake stretched past two hours."}
+{"split":"challenge","category":"sarcasm","label":0,"expected_label":"negative","text":"What a brilliant idea to replace believable characters with endless explosions."}
+{"split":"challenge","category":"sarcasm","label":0,"expected_label":"negative","text":"The dialogue is wonderfully effective, if the goal was to make the audience cringe."}
+{"split":"challenge","category":"sarcasm","label":0,"expected_label":"negative","text":"A masterpiece of wasted talent and squandered opportunities."}
+{"split":"challenge","category":"sarcasm","label":1,"expected_label":"positive","text":"As if being hilarious were not enough, the film has the nerve to be genuinely moving too."}
+{"split":"challenge","category":"sarcasm","label":1,"expected_label":"positive","text":"Just what we did not expect from this franchise: a sequel with wit, heart, and purpose."}
+{"split":"challenge","category":"long_distance","label":1,"expected_label":"positive","text":"Though burdened by a slow introduction and an unnecessary subplot, the film ultimately rewards patience with a powerful and beautifully earned finale."}
+{"split":"challenge","category":"long_distance","label":0,"expected_label":"negative","text":"For all its expensive sets, celebrated cast, and ambitious themes, the movie never develops a compelling reason to exist."}
+{"split":"challenge","category":"long_distance","label":1,"expected_label":"positive","text":"What begins as a conventional mystery gradually reveals emotional depth, visual confidence, and an ending that transforms everything before it."}
+{"split":"challenge","category":"long_distance","label":0,"expected_label":"negative","text":"After an intriguing opening and several promising ideas, the story collapses into incoherence precisely when it should become most engaging."}
+{"split":"challenge","category":"quotation","label":0,"expected_label":"negative","text":"The poster calls it 'the comedy event of the year,' a claim the film disproves with every scene."}
+{"split":"challenge","category":"quotation","label":1,"expected_label":"positive","text":"Calling the film 'a minor miracle' sounds excessive until its quietly stunning final act."}
+{"split":"challenge","category":"quotation","label":0,"expected_label":"negative","text":"Characters repeatedly describe the plan as 'brilliant,' though the screenplay never makes it plausible."}
+{"split":"challenge","category":"quotation","label":1,"expected_label":"positive","text":"The title promises 'an extraordinary journey,' and for once the advertising is accurate."}
+{"split":"challenge","category":"idiom","label":1,"expected_label":"positive","text":"The young lead knocks it out of the park in every scene."}
+{"split":"challenge","category":"idiom","label":0,"expected_label":"negative","text":"The director completely misses the mark with this heavy-handed drama."}
+{"split":"challenge","category":"idiom","label":1,"expected_label":"positive","text":"Against all odds, the strange combination of horror and comedy works like a charm."}
+{"split":"challenge","category":"idiom","label":0,"expected_label":"negative","text":"The film runs out of steam long before reaching its chaotic conclusion."}
+{"split":"challenge","category":"scope","label":1,"expected_label":"positive","text":"Only the most determined cynic could resist this humane and joyful story."}
+{"split":"challenge","category":"scope","label":0,"expected_label":"negative","text":"Not one of the many plot twists feels either surprising or necessary."}
+{"split":"challenge","category":"scope","label":1,"expected_label":"positive","text":"Nothing about the modest production suggests how emotionally powerful it will become."}
+{"split":"challenge","category":"scope","label":0,"expected_label":"negative","text":"Almost every attempt at humor lands with an uncomfortable silence."}
+

@@ -1,0 +1,123 @@
+[
+  {
+    "category": "general_sentiment",
+    "expected_label": "positive",
+    "text": "The new update is fast, intuitive, and much better than the previous version."
+  },
+  {
+    "category": "general_sentiment",
+    "expected_label": "negative",
+    "text": "The application crashes constantly and I regret installing it."
+  },
+  {
+    "category": "general_sentiment",
+    "expected_label": "neutral",
+    "text": "The application update was released on Tuesday morning."
+  },
+  {
+    "category": "product_review",
+    "expected_label": "positive",
+    "text": "The headphones sound excellent and the battery lasts all day."
+  },
+  {
+    "category": "product_review",
+    "expected_label": "negative",
+    "text": "The screen stopped working after two days and customer support never replied."
+  },
+  {
+    "category": "product_review",
+    "expected_label": "neutral",
+    "text": "The package contains one charger, a cable, and an instruction manual."
+  },
+  {
+    "category": "movie_review",
+    "expected_label": "positive",
+    "text": "The performances were captivating and the final scene was unforgettable."
+  },
+  {
+    "category": "movie_review",
+    "expected_label": "negative",
+    "text": "The story was predictable, poorly paced, and far too long."
+  },
+  {
+    "category": "social_media",
+    "expected_label": "positive",
+    "text": "Just finished my first marathon! I cannot stop smiling!"
+  },
+  {
+    "category": "social_media",
+    "expected_label": "negative",
+    "text": "Another delayed train. What a terrible way to start the week."
+  },
+  {
+    "category": "social_media",
+    "expected_label": "neutral",
+    "text": "The concert begins at 8 PM and the doors open at 6:30."
+  },
+  {
+    "category": "finance",
+    "expected_label": "positive",
+    "text": "Quarterly profit increased by 18 percent and exceeded analyst expectations."
+  },
+  {
+    "category": "finance",
+    "expected_label": "negative",
+    "text": "The company reported a significant loss and lowered its annual forecast."
+  },
+  {
+    "category": "finance",
+    "expected_label": "neutral",
+    "text": "The board will publish the quarterly results at its meeting next Friday."
+  },
+  {
+    "category": "negation",
+    "expected_label": "positive",
+    "text": "The service was not bad at all; I would happily use it again."
+  },
+  {
+    "category": "negation",
+    "expected_label": "negative",
+    "text": "I cannot recommend this restaurant to anyone."
+  },
+  {
+    "category": "mixed_or_ambiguous",
+    "expected_label": "mixed",
+    "text": "The camera is excellent, but the battery life is disappointing."
+  },
+  {
+    "category": "sarcasm",
+    "expected_label": "negative",
+    "text": "Wonderful, the app deleted all my work again."
+  },
+  {
+    "category": "emotion",
+    "expected_label": "joy",
+    "text": "I got accepted into my dream university and I am incredibly happy!"
+  },
+  {
+    "category": "emotion",
+    "expected_label": "anger",
+    "text": "I am furious that they charged me twice and refused to correct it."
+  },
+  {
+    "category": "emotion",
+    "expected_label": "sadness",
+    "text": "I miss my old friends and feel lonely without them."
+  },
+  {
+    "category": "emotion",
+    "expected_label": "fear",
+    "text": "I am terrified about what might happen during the storm tonight."
+  },
+  {
+    "category": "emotion",
+    "expected_label": "gratitude",
+    "text": "Thank you for staying late to help me finish the project."
+  },
+  {
+    "category": "emotion_multilabel",
+    "expected_label": ["nervousness", "excitement"],
+    "text": "I am nervous about tomorrow's interview, but also excited for the opportunity."
+  }
+]
+
