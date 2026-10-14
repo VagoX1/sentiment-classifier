@@ -51,7 +51,7 @@ are written under `outputs/`. Both directories are excluded from Git.
 Python 3.10 or newer is recommended.
 
 ```powershell
-git clone https://github.com/YOUR_USERNAME/sentiment-classifier.git
+git clone https://github.com/VagoX1/sentiment-classifier.git
 cd sentiment-classifier
 
 python -m venv .venv
