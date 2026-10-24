@@ -1,3 +1,5 @@
+"""Batch evaluation of saved binary classifiers with grouped error reports."""
+
 from __future__ import annotations
 
 import json
@@ -8,6 +10,7 @@ import torch
 
 
 def read_jsonl(path: str | Path) -> list[dict]:
+    """Read nonempty binary-labeled records, preserving optional report fields."""
     records = []
     with Path(path).open(encoding="utf-8") as handle:
         for line_number, line in enumerate(handle, start=1):
@@ -26,6 +29,7 @@ def read_jsonl(path: str | Path) -> list[dict]:
 
 
 def _transformer_predictions(model_dir: str, texts: list[str], batch_size: int) -> list[int]:
+    """Predict class IDs in input order, using CUDA when available."""
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(model_dir)
@@ -46,6 +50,7 @@ def _transformer_predictions(model_dir: str, texts: list[str], batch_size: int) 
 
 
 def _lstm_predictions(model_dir: str, texts: list[str], batch_size: int) -> list[int]:
+    """Recreate the saved LSTM and vocabulary for batched CPU inference."""
     from torch.nn.utils.rnn import pad_sequence
 
     from .lstm import SentimentLSTM, tokenize_text
@@ -75,6 +80,11 @@ def _lstm_predictions(model_dir: str, texts: list[str], batch_size: int) -> list
 
 
 def evaluate_sst2(model_dir: str, test_file: str, batch_size: int = 32, output: str | None = None):
+    """Return grouped accuracy and per-example predictions for a binary JSONL set.
+
+    Label IDs in the file must match the saved model's label order. The optional
+    output path receives the full report, including the original record fields.
+    """
     path = Path(model_dir)
     metadata_path = path / "sentiment_config.json"
     if not metadata_path.exists():
@@ -90,6 +100,7 @@ def evaluate_sst2(model_dir: str, test_file: str, batch_size: int = 32, output: 
     else:
         predictions = _lstm_predictions(model_dir, texts, batch_size)
 
+    # Each example contributes to overall, split, and category accuracy.
     groups = defaultdict(lambda: [0, 0])
     detailed = []
     for record, prediction in zip(records, predictions):

@@ -1,3 +1,5 @@
+"""A bidirectional LSTM baseline with training, evaluation, and inference helpers."""
+
 from __future__ import annotations
 
 import json
@@ -18,10 +20,12 @@ TOKEN_PATTERN = re.compile(r"[\w']+|[^\w\s]", re.UNICODE)
 
 
 def tokenize_text(text: str) -> list[str]:
+    """Lowercase text and split words and punctuation into separate tokens."""
     return TOKEN_PATTERN.findall(text.lower())
 
 
 def build_vocabulary(texts, min_frequency: int = 2, max_size: int = 50_000):
+    """Keep frequent tokens, reserving IDs 0 for padding and 1 for unknowns."""
     counts = Counter(token for text in texts for token in tokenize_text(text))
     tokens = [token for token, count in counts.most_common() if count >= min_frequency]
     tokens = tokens[: max(0, max_size - 2)]
@@ -29,6 +33,8 @@ def build_vocabulary(texts, min_frequency: int = 2, max_size: int = 50_000):
 
 
 class TextDataset(Dataset):
+    """Convert normalized records to token IDs and task-appropriate target tensors."""
+
     def __init__(self, split, vocabulary, multi_label: bool, max_length: int = 256):
         self.split = split
         self.vocabulary = vocabulary
@@ -41,12 +47,14 @@ class TextDataset(Dataset):
     def __getitem__(self, index):
         item = self.split[index]
         tokens = tokenize_text(item["text"])[: self.max_length]
+        # Packed sequences require at least one token, even for empty text.
         ids = [self.vocabulary.get(token, 1) for token in tokens] or [1]
         label_dtype = torch.float32 if self.multi_label else torch.long
         return torch.tensor(ids), torch.tensor(item["labels"], dtype=label_dtype)
 
 
 def collate_batch(batch):
+    """Pad to the longest sequence in this batch and retain the original lengths."""
     sequences, labels = zip(*batch)
     lengths = torch.tensor([len(sequence) for sequence in sequences])
     padded = pad_sequence(sequences, batch_first=True, padding_value=0)
@@ -54,6 +62,8 @@ def collate_batch(batch):
 
 
 class SentimentLSTM(nn.Module):
+    """Embed tokens and classify the concatenated forward/backward final states."""
+
     def __init__(self, vocabulary_size: int, num_labels: int, embedding_size=128, hidden_size=128):
         super().__init__()
         self.embedding = nn.Embedding(vocabulary_size, embedding_size, padding_idx=0)
@@ -64,11 +74,13 @@ class SentimentLSTM(nn.Module):
         self.classifier = nn.Linear(hidden_size * 2, num_labels)
 
     def forward(self, token_ids, lengths):
+        """Return [batch, labels] logits, excluding padding from recurrent updates."""
         embedded = self.embedding(token_ids)
         packed = pack_padded_sequence(
             embedded, lengths.cpu(), batch_first=True, enforce_sorted=False
         )
         _, (hidden, _) = self.lstm(packed)
+        # The two directions each contribute hidden_size features.
         representation = torch.cat((hidden[-2], hidden[-1]), dim=1)
         return self.classifier(self.dropout(representation))
 
@@ -83,7 +95,9 @@ def train_lstm(
     max_length: int = 256,
     seed: int = 42,
 ):
+    """Train the baseline, save the final epoch, and return validation metrics."""
     torch.manual_seed(seed)
+    # Learn token frequencies from training text only to avoid validation leakage.
     vocabulary = build_vocabulary(dataset["train"]["text"])
     is_multi = spec.task_type == "multi_label"
     train_data = TextDataset(dataset["train"], vocabulary, is_multi, max_length)
@@ -94,6 +108,7 @@ def train_lstm(
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SentimentLSTM(len(vocabulary), len(spec.label_names)).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+    # Independent labels use binary loss; exclusive classes use cross entropy.
     criterion = nn.BCEWithLogitsLoss() if is_multi else nn.CrossEntropyLoss()
 
     for epoch in range(int(epochs)):
@@ -104,6 +119,7 @@ def train_lstm(
             logits = model(token_ids.to(device), lengths)
             loss = criterion(logits, labels.to(device))
             loss.backward()
+            # Limit large recurrent gradients before updating the weights.
             nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
             total_loss += loss.item()
@@ -122,6 +138,7 @@ def train_lstm(
 
 
 def evaluate_lstm(model, loader, device, multi_label: bool):
+    """Disable dropout and gradients, then score all batches together."""
     model.eval()
     all_logits, all_labels = [], []
     with torch.no_grad():
@@ -134,6 +151,10 @@ def evaluate_lstm(model, loader, device, multi_label: bool):
 
 
 def predict_lstm(model_dir: str, text: str, threshold: float = 0.5):
+    """Reload a CPU model and return scores sorted from highest to lowest.
+
+    Multi-label results include only labels meeting the probability threshold.
+    """
     path = Path(model_dir)
     metadata = json.loads((path / "sentiment_config.json").read_text(encoding="utf-8"))
     vocabulary = json.loads((path / "vocabulary.json").read_text(encoding="utf-8"))

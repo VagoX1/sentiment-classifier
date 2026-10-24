@@ -1,3 +1,5 @@
+"""Fine-tune pretrained Transformer classifiers and reload them for prediction."""
+
 from __future__ import annotations
 
 import json
@@ -19,6 +21,7 @@ def train_transformer(
     max_length: int = 256,
     seed: int = 42,
 ):
+    """Fine-tune on training data and save the checkpoint with best validation F1."""
     try:
         from transformers import (
             AutoModelForSequenceClassification,
@@ -35,6 +38,7 @@ def train_transformer(
     def tokenize(batch):
         return tokenizer(batch["text"], truncation=True, max_length=max_length)
 
+    # Truncate here; the collator pads dynamically to each batch's longest input.
     tokenized = dataset.map(tokenize, batched=True)
     id2label = {index: label for index, label in enumerate(spec.label_names)}
     model = AutoModelForSequenceClassification.from_pretrained(
@@ -54,6 +58,7 @@ def train_transformer(
             return multi_label_metrics(logits, labels)
         return single_label_metrics(logits, labels)
 
+    # Choose checkpoints on validation F1; test data is not used by the Trainer.
     args = TrainingArguments(
         output_dir=output_dir,
         learning_rate=learning_rate,
@@ -87,6 +92,7 @@ def train_transformer(
 
 
 def _write_metadata(output_dir: str, model_type: str, spec, **extra) -> None:
+    """Persist backend, task, label order, and optional architecture settings."""
     path = Path(output_dir)
     path.mkdir(parents=True, exist_ok=True)
     metadata = {
@@ -99,6 +105,7 @@ def _write_metadata(output_dir: str, model_type: str, spec, **extra) -> None:
 
 
 def predict_transformer(model_dir: str, text: str, threshold: float = 0.5):
+    """Return descending label scores; threshold only independent multi-label scores."""
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 

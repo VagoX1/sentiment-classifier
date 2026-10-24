@@ -1,3 +1,5 @@
+"""Dataset definitions, label normalization, and custom training-data mixing."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -13,6 +15,8 @@ TaskType = Literal["single_label", "multi_label"]
 
 @dataclass(frozen=True)
 class DatasetSpec:
+    """Describe source columns and the ordered label IDs used by both backends."""
+
     repo: str
     config: str | None
     text_column: str
@@ -64,6 +68,7 @@ DATASETS: dict[str, DatasetSpec] = {
 
 
 def list_datasets() -> str:
+    """Format the dataset registry for the CLI without downloading any data."""
     rows = []
     for name, spec in DATASETS.items():
         rows.append(
@@ -88,6 +93,7 @@ def load_and_prepare(name: str, max_train_samples: int | None = None, seed: int 
 
     if "train" not in raw:
         raise ValueError(f"{spec.repo} does not expose a train split")
+    # Derive validation from training only; preserve any existing test split.
     if "validation" not in raw:
         split = raw["train"].train_test_split(test_size=0.1, seed=seed)
         raw = DatasetDict({**raw, "train": split["train"], "validation": split["test"]})
@@ -96,6 +102,7 @@ def load_and_prepare(name: str, max_train_samples: int | None = None, seed: int 
         result = {"text": example[spec.text_column]}
         source = example[spec.label_column]
         if spec.task_type == "multi_label":
+            # Multi-hot targets allow several emotions to be active at once.
             vector = [0.0] * len(spec.label_names)
             for label_id in source:
                 vector[int(label_id)] = 1.0
@@ -134,6 +141,7 @@ def parse_external_label(value, label_names: tuple[str, ...]) -> int:
 
 
 def _read_custom_records(path: str | Path) -> list[dict]:
+    """Read a nonempty record list from CSV, a JSON array, or JSON Lines."""
     path = Path(path)
     if path.suffix.lower() in {".jsonl", ".json"}:
         if path.suffix.lower() == ".jsonl":
@@ -176,9 +184,11 @@ def add_custom_training_data(dataset, spec, path: str, target_ratio: float, seed
 
     extra = Dataset.from_list(normalized)
     base_count = len(dataset["train"])
+    # Solve custom / (base + custom) = target_ratio for the custom row count.
     target_count = max(1, round(base_count * target_ratio / (1.0 - target_ratio)))
     repeat_factor = math.ceil(target_count / len(extra))
     oversampled = concatenate_datasets([extra] * repeat_factor).shuffle(seed=seed).select(range(target_count))
+    # Only training is modified; callers must supply custom data free of held-out examples.
     dataset["train"] = concatenate_datasets([dataset["train"], oversampled]).shuffle(seed=seed)
     return dataset, {
         "unique_custom_examples": len(extra),

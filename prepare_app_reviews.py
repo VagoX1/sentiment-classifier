@@ -13,6 +13,7 @@ WHITESPACE = re.compile(r"\s+")
 
 
 def clean_review(value: object) -> str:
+    """Decode HTML entities and normalize line breaks and whitespace."""
     text = html.unescape(str(value or ""))
     text = text.replace("<br />", " ").replace("<br>", " ")
     return WHITESPACE.sub(" ", text).strip()
@@ -29,6 +30,7 @@ def rating_from_feature(value: object, feature=None) -> int:
 
 
 def sentiment_from_rating(rating: int) -> int | None:
+    """Map low/high star ratings to binary labels, excluding neutral three-star reviews."""
     if rating in (1, 2):
         return 0
     if rating in (4, 5):
@@ -47,6 +49,11 @@ def collect_balanced(
     max_chars: int,
     excluded_texts: set[str] | None = None,
 ) -> tuple[list[dict], set[str]]:
+    """Sample balanced unique reviews and return records plus all reserved text keys.
+
+    Matching ignores case. Returned keys also include accepted candidates later
+    trimmed for balance, so subsequent splits cannot reuse those candidates.
+    """
     excluded_texts = excluded_texts or set()
     seen = set(excluded_texts)
     records: dict[int, list[dict]] = {0: [], 1: []}
@@ -90,6 +97,7 @@ def collect_balanced(
 
 
 def write_jsonl(records: list[dict], path: str | Path) -> None:
+    """Write one UTF-8 JSON object per line, creating parent directories as needed."""
     output = Path(path)
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("w", encoding="utf-8", newline="\n") as handle:
@@ -98,6 +106,7 @@ def write_jsonl(records: list[dict], path: str | Path) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Define source, output paths, and reproducible sampling limits."""
     parser = argparse.ArgumentParser(
         description="Prepare balanced binary sentiment data from English app reviews"
     )
@@ -118,6 +127,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> None:
+    """Prepare disjoint balanced files from the source train and test splits."""
     args = build_parser().parse_args(argv)
     if args.train_per_label < 1 or args.validation_per_label < 1 or args.test_per_label < 1:
         raise SystemExit("Sample counts must be positive")
@@ -141,6 +151,7 @@ def main(argv=None) -> None:
         dataset["train"], star_feature, args.train_per_label, args.seed,
         args.min_chars, args.max_chars,
     )
+    # Reserve training texts before sampling validation; exclude both from test.
     validation_records, train_and_validation_texts = collect_balanced(
         dataset["train"], star_feature, args.validation_per_label, args.seed + 1,
         args.min_chars, args.max_chars, excluded_texts=train_texts,

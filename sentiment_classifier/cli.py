@@ -1,3 +1,5 @@
+"""Command-line entry points for dataset discovery, training, and evaluation."""
+
 from __future__ import annotations
 
 import argparse
@@ -8,6 +10,7 @@ from .data import DATASETS, add_custom_training_data, list_datasets, load_and_pr
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Define supported commands and their dataset/model options."""
     parser = argparse.ArgumentParser(description="Train and use sentiment classifiers")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("datasets", help="List supported public datasets")
@@ -59,11 +62,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None):
+    """Dispatch CLI arguments; accept an explicit argument list for programmatic use."""
     args = build_parser().parse_args(argv)
     if args.command == "datasets":
         print(list_datasets())
         return
 
+    # Import model backends on demand so listing datasets stays lightweight.
     if args.command == "predict":
         metadata_path = Path(args.model_dir) / "sentiment_config.json"
         if not metadata_path.exists():
